@@ -5,8 +5,7 @@ const router = express.Router();
 //Post Method
 router.post('/post', async (req, res) => {
     const data = new Model({
-        name: req.body.name,
-        age: req.body.age
+        nombre: req.body.nombre,
     })
 
     try {
@@ -44,11 +43,11 @@ router.get('/getOne/:id', async (req, res) => {
 router.patch('/update/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const updatedData = req.body;
+        const updateddata = req.body;
         const options = { new: true };
 
         const result = await Model.findByIdAndUpdate(
-            id, updatedData, options
+            id, updateddata, options
         )
 
         res.send(result)
