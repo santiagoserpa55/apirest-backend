@@ -1,72 +1,57 @@
 const express = require('express');
 const Model = require('../models/model');
 const router = express.Router();
-
+const path = require('path');
+const { insertMany } = require('../models/model');
 //Post Method
-router.post('/post', async (req, res) => {
-    const data = new Model({
-        nombre: req.body.nombre,
-    })
 
+router.get(``, async (req, res) => {
+  const data = new Model({
+    name: req.query.name,
+  })
+  if (data.name !== undefined) {
     try {
-        const dataToSave = await data.save();
-        res.status(200).json(dataToSave)
+      const dataToSave = await data.save();
+      //res.status(200).send(dataToSave)
+      res.sendFile(path.join(__dirname, '../index.html'));
     }
     catch (error) {
-        res.status(400).json({ message: error.message })
+      res.status(400).json({ message: error.message })
     }
-})
+  } else if (req.query.name === 'kill') {
+    console.log('kill');
+    //Código para eliminar los usuario
+  } else {
+    res.sendFile(path.join(__dirname, '../index.html'));
+  }
+}) 
+
 
 //Get all Method
 router.get('/getAll', async (req, res) => {
-    try {
-        const data = await Model.find();
-        res.json(data)
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message })
-    }
+  try {
+    const data = await Model.find();
+    res.json(data)
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 })
-
-//Get by ID Method
-router.get('/getOne/:id', async (req, res) => {
-    try {
-        const data = await Model.findById(req.params.id);
-        res.json(data)
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-})
-
-//Update by ID Method
-router.patch('/update/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const updateddata = req.body;
-        const options = { new: true };
-
-        const result = await Model.findByIdAndUpdate(
-            id, updateddata, options
-        )
-
-        res.send(result)
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-})
-
 //Delete by ID Method
-router.delete('/delete/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const data = await Model.findByIdAndDelete(id)
-        res.send(`Document with ${data.name} has been deleted..`)
-    }
-    catch (error) {
-        res.status(400).json({ message: error.message })
-    }
-})
+router.delete('', async (req, res) => {
+  const data = new Model({
+    name: req.query.name,
+  })
+   try {
+    const data = await Model.collection.drop()
+    Model.collection.insertOne({
+      "name": "Paul Herrick",
+    })
+    res.sendFile(path.join(__dirname, '../index.html'));
+  }
+  catch (error) {
+    res.status(400).json({ message: error.message })
+  }
 
+})
 module.exports = router;
