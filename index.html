@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <script defer src="./app.js"></script> -->
   <title>Challenge199ca</title>
 </head>
 <body>
@@ -12,14 +11,15 @@
     <ul id="unorderedlist">
     </ul>
     <script>
+      const employes = document.getElementById('unorderedlist');
       //traer datos
       document.addEventListener("DOMContentLoaded", e => {
         fetchData();
       })
       const fetchData = async () => {
         try {
-          const res = await fetch('https://usersantiago.onrender.com/api/');
-          const data = await res.json();
+          const res = await fetch('https://usersantiago.onrender.com/api/getAll');
+          const data = await res.json()
           empl(data);
         } catch (error) {
           console.log("errorsesr", error);
@@ -28,17 +28,15 @@
       const empl = data => {
         let elementos = '';
         data.forEach(item => {
-          elementos += `
-        <li>${item.name}</li>`
+          elementos += `<li>${item.name}</li>`
         });
         unorderedlist.innerHTML = elementos;
       }
       //fin traer traer datos
-      const URL_ADD = "https://usersantiago.onrender.com/api/"
-      const employes = document.getElementById('unorderedlist');
+      const URL_ADD = "https://usersantiago.onrender.com/api"
       function collecData(e) {
         e.preventDefault();
-        const name = document.getElementById("fieldname").value
+        const name = document.getElementById("name").value
           const employe = {
             name: name,
           }
@@ -46,7 +44,6 @@
           save(dataTosend);
         }
       function save(data) {
-        console.log(`data is ${data}`);
         fetch(URL_ADD, {
           method: "GET",
           headers: {
@@ -64,16 +61,14 @@
             handleError(error.message);
           });
       }
-const add = document.getElementById("add")
-add.addEventListener("submit", collecData);
     </script>
-    <form action="https://usersantiago.onrender.com/api/">
-      <input name="name" length="0" placeholder="Employee Name">
+    <form action="https://usersantiago.onrender.com/api">
+      <input name="name" length="0" placeholder="Employee Name"/>
       <button type="submit" id="add">Add</button>
     </form>
     <br>
     
-    <form action="https://usersantiago.onrender.com/api/" method="get">
+    <form action="https://usersantiago.onrender.com/api" method="get">
       <input type="hidden" name="kill">
       <button type="submit" id="kill">Kill All</button>
     </form>
@@ -83,6 +78,7 @@ add.addEventListener("submit", collecData);
       text-align: center;
     }
   </style>
+ 
 </body>
 
 </html>

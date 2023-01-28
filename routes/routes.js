@@ -8,6 +8,7 @@ const { insertMany } = require('../models/model');
 router.get(``, async (req, res) => {
   const data = new Model({
     name: req.query.name,
+    kill: req.query.name,
   })
   if (data.name !== undefined) {
     try {
@@ -18,11 +19,14 @@ router.get(``, async (req, res) => {
     catch (error) {
       res.status(400).json({ message: error.message })
     }
-  } else if (req.query.name === 'kill') {
-    console.log('kill');
-    //Código para eliminar los usuario
-  } else {
+  } else if (req.query.kill === '') {
+    const data = await Model.collection.drop()
+    Model.collection.insertOne({
+      "name": "Paul Herrick",
+    })
     res.sendFile(path.join(__dirname, '../index.html'));
+  } else {
+   res.sendFile(path.join(__dirname, '../index.html'));
   }
 }) 
 
@@ -37,21 +41,5 @@ router.get('/getAll', async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 })
-//Delete by ID Method
-router.delete('', async (req, res) => {
-  const data = new Model({
-    name: req.query.name,
-  })
-   try {
-    const data = await Model.collection.drop()
-    Model.collection.insertOne({
-      "name": "Paul Herrick",
-    })
-    res.sendFile(path.join(__dirname, '../index.html'));
-  }
-  catch (error) {
-    res.status(400).json({ message: error.message })
-  }
 
-})
 module.exports = router;
